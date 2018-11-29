@@ -1,2 +1,9 @@
-# OLP-FOSS-2018
-This repo is the centralized warehouse for National Olympic IT contest - OSS section. All participated teams must submit the reports, source codes, documents by sending Pull Request to this repo before deadline.
+# OLP FOSS 2018 - Đại học sư phạm Thành Phố Hồ Chí Minh
+
+## Thành viên
+- Nguyễn Quang Phúc
+- Lương Công Tâm
+- Huỳnh Nhật Long
+
+## Library 
+https://drive.google.com/file/d/18phjk7YfklIpKyy35AVxlK0k92DYuD8R/view?usp=sharing

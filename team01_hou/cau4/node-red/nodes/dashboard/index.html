@@ -1,0 +1,143 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>ESP32 Panel</title>
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/adminlte.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/chart.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/js/plugins/datatables/jquery.dataTables.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/js/plugins/datatables/dataTables.bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/main.css">
+</head>
+
+<body class="sidebar-mini skin-blue">
+	<div class="wrapper">
+		<header class="main-header">
+			<a href="index.html" class="logo">
+				<span class="logo-lg"><b>ESP32 Panel</b></span>
+			</a>
+			<nav class="navbar navbar-static-top">
+				<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+					<span class="sr-only">Toggle navigation</span>
+				</a>
+				<div class="navbar-custom-menu">
+				</div>
+			</nav>
+		</header>
+		<aside class="main-sidebar">
+			<section class="sidebar">
+				<ul class="sidebar-menu" id="sidebar-menu">
+					<li class="active espx-sidebar-element">
+						<a href="#" id="dashboard">
+							<i class="fa fa-dashboard" aria-hidden="true"></i>
+							<span>Home</span>
+						</a>
+					</li>
+					<li class="espx-sidebar-element">
+						<a href="activity.html" id="devices-info">
+							<i class="fa fa-columns" aria-hidden="true"></i>
+							<span>Activity</span>
+						</a>
+					</li>
+					<!-- <li class="espx-sidebar-element">
+						<a href="#" id="sensors-info">
+							<i class="fa fa-thermometer-empty" aria-hidden="true"></i>
+							<span>Sensors</span>
+						</a>
+					</li> -->
+					<li class="espx-sidebar-element">
+						<a href="line_chart.html" id="line-chart">
+							<i class="fa fa-line-chart" aria-hidden="true"></i>
+							<span>Lines chart</span>
+						</a>
+					</li>
+				</ul>
+			</section>
+		</aside>
+		<div class="content-wrapper">
+			<section class="content-header">
+				<h1 id="content-header-text">
+					Activity
+				</h1>
+			</section>
+			<section class="content">
+				<div class="col-md-12">
+					<div class="" style="color: #333; text-align: center;">
+						<img src="" class="imgActi">
+						<label class="col-md-12 labelActi" style="font-size: 30px;">No label</label>
+						<label class="col-md-12 labelTime"></label>
+					</div>
+				</div>
+				<div class="row espx-dashboard">
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<canvas id="realtime-line-chart" width="400" height="400"></canvas>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<footer class="main-footer">
+			<div class="pull-right hidden-xs">
+				<h3><center>OLP2018 - HOU - Team01</center></h3>
+			</div>
+		</footer>
+	</div>
+
+</body>
+<style>
+	.label-chart{
+		color: #333;
+	}
+</style>
+
+<script type="text/javascript" src="/static/js/plugins/jquery.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/select2.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/d3.v3.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/Chart.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/Chart.PieceLabel.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/moment.js"></script>
+<script type="text/javascript" src="/static/js/plugins/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="/static/js/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/static/js/adminlte.min.js"></script>
+<script type="text/javascript" src="/static/js/chartist.min.js"></script>
+
+<script type="text/javascript" src="/static/js/main.js"></script>
+
+<script type="text/javascript">
+/*
+	$(document).ready(function () {
+		$('#dashboard').click();
+	});
+*/
+$(document).ready(function () {
+	getActivity();
+	setTimeout(function(){
+		getActivity();
+	}, 1000);
+});
+function getActivity() {
+	$.ajax({
+		url: '/api/activity/latest',
+		type: 'get',
+		success: function(result){
+				var data = JSON.parse(result);
+				var activity = data[0]['actvity_label'];
+				$('.imgActi').attr('src', '/static/image/' + activity + '.png');
+				$('.labelActi').html(activity);
+				var time = new Date(data[0]['time']);
+				$('.labelTime').html(time);
+		}
+	});
+	setTimeout(function(){
+		getActivity();
+	}, 1000);
+}
+</script>
+</html>

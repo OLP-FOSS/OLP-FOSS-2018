@@ -1,0 +1,19 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard for user interfaces",
+  "dependencies": {
+        "express": "4.15.3"
+  },
+  "main": "none",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ha Manh Dong",
+  "license": "ISC",
+  "node-red" : {
+      "nodes": {
+          "dashboard": "dashboard.js"
+      }
+  }
+}

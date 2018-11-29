@@ -6,7 +6,7 @@ import pickle
 import json
 from preprocess import segment_data, get_features, parse_data, segment_data_with_timestamp
 # from gesture import get_gestures
-
+from dtwknn import DtwKnn
 
 mapping_activities = {
     1: 'WALKING',
@@ -24,7 +24,7 @@ mapping_activities = {
 }
 
 model_activity = pickle.load(open('model_saved/random_forest.model', 'rb'))
-
+dtwknn = DtwKnn(n_neighbors=5)
 
 app = Flask(__name__)
 
@@ -50,11 +50,22 @@ def predict_gesture():
         pass
 
 
+@app.route('add_sample_dtw', methods=['GET', 'POST'])
+def add_sample_dtw():
+    if request.method == 'POST':
+        data = request.data.decode('utf8')
+        data = parse_data(data)
+        data_add = data[['ax', 'ay', 'az']].values
+        label = 'sitting'
+        dtwknn.add_example()
+
+
 @app.route('/predict_activity', methods=['GET', 'POST'])
 def predict_activity():
     if request.method == 'POST':
         data = request.data.decode('utf8')
         data = parse_data(data)
+        print(data.shape)
         data_segmented = segment_data_with_timestamp(data, 3) # segment data with window size is 3 seconds
         features = get_features(data_segmented)
         print(features.shape)
@@ -62,7 +73,7 @@ def predict_activity():
         labels = []
         for pred in preds:
             labels.append(mapping_activities[pred])
-        return labels[0]
+        return str(labels[-1])
     return 'unknown'
 
 

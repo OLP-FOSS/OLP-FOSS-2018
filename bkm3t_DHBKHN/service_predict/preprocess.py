@@ -41,13 +41,13 @@ def parse_data(raw_data):
             print(e)
             continue
 
-        data['timestamps'].append(line_json['timestamps'])
+        data['timestamps'].append(line_json['timestamps']/1000)
         data['yaw'].append(line_json['yaw'])
         data['pitch'].append(line_json['pitch'])
         data['roll'].append(line_json['roll'])
-        data['ax'].append(line_json['Ax'] / 16384)
-        data['ay'].append(line_json['Ay'] / 16384)
-        data['az'].append(line_json['Az'] / 16384)
+        data['ax'].append(line_json['Ax'] / 4096)
+        data['ay'].append(line_json['Ay'] / 4096)
+        data['az'].append(line_json['Az'] / 4096)
 
     results = pd.DataFrame(data)
     return results

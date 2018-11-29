@@ -1,0 +1,103 @@
+[
+    {
+        "id": "dfcfc490.238638",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "4e7ed1f3.a0e17",
+        "type": "load dataset",
+        "z": "dfcfc490.238638",
+        "name": "",
+        "datasetFolder": "test/datasets",
+        "datasetName": "input",
+        "partition": "train.csv",
+        "input": true,
+        "output": true,
+        "x": 210,
+        "y": 160,
+        "wires": [
+            [
+                "fdf5af6a.dff83"
+            ],
+            [
+                "8cd97d41.165db"
+            ]
+        ],
+        "outputLabels": [
+            "\"c90b778b.5e4c38\"",
+            "84f95f93.73533"
+        ]
+    },
+    {
+        "id": "7990fdf0.ae1664",
+        "type": "inject",
+        "z": "dfcfc490.238638",
+        "name": "start",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 360,
+        "wires": [
+            [
+                "4e7ed1f3.a0e17"
+            ]
+        ]
+    },
+    {
+        "id": "8cd97d41.165db",
+        "type": "debug",
+        "z": "dfcfc490.238638",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 690,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "c0a662a5.0d03c",
+        "type": "debug",
+        "z": "dfcfc490.238638",
+        "name": "print",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 730,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "fdf5af6a.dff83",
+        "type": "decision tree classifier",
+        "z": "dfcfc490.238638",
+        "name": "",
+        "savePath": "test/models",
+        "saveName": "dtc.b",
+        "maxDepth": "",
+        "criterion": "gini",
+        "splitter": "best",
+        "x": 400,
+        "y": 40,
+        "wires": [
+            [
+                "c0a662a5.0d03c"
+            ],
+            [
+                "8cd97d41.165db"
+            ]
+        ]
+    }
+]

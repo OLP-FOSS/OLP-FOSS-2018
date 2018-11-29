@@ -1,0 +1,124 @@
+[
+    {
+        "id": "641a7d4e.586344",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1ce1d87.4ce6c28",
+        "type": "mqtt in",
+        "z": "641a7d4e.586344",
+        "name": "",
+        "topic": "SM01",
+        "qos": "2",
+        "broker": "bbd9880a.9bf2d8",
+        "x": 90,
+        "y": 360,
+        "wires": [
+            [
+                "eac9870.21c7078"
+            ]
+        ]
+    },
+    {
+        "id": "cbb6e196.3605c",
+        "type": "function",
+        "z": "641a7d4e.586344",
+        "name": "",
+        "func": "var input=msg.payload\nparse=function(input){\n    var arr=[]\n    for(var key in input){\n        arr.push(input[key])\n    }\n    return arr\n}\nparse2=function(input){\n    var arr=[]\n    arr.push(input)\n    return arr\n}\ninput.payload=parse(input)\ninput.payload=parse2(input.payload)\nreturn input\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [
+                "ace860ec.2cc27"
+            ]
+        ]
+    },
+    {
+        "id": "eac9870.21c7078",
+        "type": "json",
+        "z": "641a7d4e.586344",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 160,
+        "y": 240,
+        "wires": [
+            [
+                "cbb6e196.3605c"
+            ]
+        ]
+    },
+    {
+        "id": "ace860ec.2cc27",
+        "type": "predictor",
+        "z": "641a7d4e.586344",
+        "name": "",
+        "modelPath": "test/models",
+        "modelName": "dtc.b",
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "ecf863c9.cb84"
+            ],
+            [
+                "76033159.7024b"
+            ]
+        ]
+    },
+    {
+        "id": "76033159.7024b",
+        "type": "debug",
+        "z": "641a7d4e.586344",
+        "name": "error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 650,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "ecf863c9.cb84",
+        "type": "mqtt out",
+        "z": "641a7d4e.586344",
+        "name": "",
+        "topic": "Power",
+        "qos": "",
+        "retain": "",
+        "broker": "bbd9880a.9bf2d8",
+        "x": 610,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "bbd9880a.9bf2d8",
+        "type": "mqtt-broker",
+        "z": "",
+        "name": "",
+        "broker": "iot.nuce.space",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]

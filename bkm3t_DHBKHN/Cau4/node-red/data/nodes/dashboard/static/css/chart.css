@@ -1,0 +1,21 @@
+
+.chart-container {
+  position: relative;
+  margin: auto;
+  height: 400px;
+  /*width: 80vw;*/
+}
+
+.realtime-chart {
+    margin-bottom: 30px;
+}
+
+.axis text {
+    font: 12px sans-serif;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}

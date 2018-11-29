@@ -1,0 +1,21 @@
+{
+  "name": "iot_data_receiver",
+  "version": "1.0.0",
+  "description": "Iot Data Receiver Node IoT Project 1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },  
+  "dependencies": {
+    "request": "^2.82.0",
+    "request-promise": "^4.2.1",
+    "nodemailer":"^4.1.1"
+  },
+  "author": "Ha Minh Cong",
+  "license": "ISC",
+  "main": "none",
+  "node-red": {
+      "nodes": {
+          "iot-data": "iot-data-receiver.js"
+      }
+  }
+}

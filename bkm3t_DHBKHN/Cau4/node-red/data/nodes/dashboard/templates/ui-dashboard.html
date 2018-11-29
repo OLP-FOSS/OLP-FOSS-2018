@@ -1,0 +1,411 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/dashboard/static/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/dashboard/static/bower_components/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/dashboard/static/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/dashboard/static/dist/css/skins/_all-skins.min.css">
+    <link rel="stylesheet" type="text/css" href="/dashboard/static/css/chart.css">
+    <link rel="stylesheet" type="text/css" href="/dashboard/static/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="/dashboard/static/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="/dashboard/static/js/plugins/datatables/jquery.dataTables.css">
+    <!--<link rel="stylesheet" type="text/css" href="/dashboard/static/js/plugins/datatables/dataTables.bootstrap.css">-->
+
+</head>
+
+<!--<body class="fixed sidebar-mini sidebar-mini-expand-feature skin-black-light">-->
+<body class="sidebar-mini skin-blue">
+<div class="wrapper">
+    <header class="main-header">
+        <!-- Header Navbar: style can be found in header.less -->
+        <a href="index.html" class="logo">
+            <span class="logo-lg"><b>BK IoT</b></span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+            </div>
+        </nav>
+    </header>
+    <!-- Sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <ul class="sidebar-menu" id="sidebar-menu">
+                <li class="active bkcloud-sidebar-element">
+                    <a href="#" id="dashboard">
+                        <i class="fa fa-dashboard" aria-hidden="true"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <!--<li class="bkcloud-sidebar-element">-->
+                    <!--<a href="#" id="line-chart">-->
+                        <!--<i class="fa fa-line-chart" aria-hidden="true"></i>-->
+                        <!--<span>Manage</span>-->
+                    <!--</a>-->
+                <!--</li>-->
+
+                <li class="bkcloud-sidebar-element">
+                    <a href="#" id="devices-info">
+                        <i class="fa fa-columns" aria-hidden="true"></i>
+                        <span>Devices</span>
+                    </a>
+                </li>
+                <li class="bkcloud-sidebar-element">
+                    <a href="#" id="sensors-info">
+                        <i class="fa fa-thermometer-empty" aria-hidden="true"></i>
+                        <span>Sensors</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+
+        <section class="content-header">
+            <h1 id="content-header-text">
+                Dashboard
+            </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row things-state-container">
+                <div class="col-md-12 col-sm-12">
+                    <!-- Custom Tabs (Pulled to the right) -->
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs pull-right">
+                            <li class="active"><a href="#tab_1-1" data-toggle="tab" aria-expanded="true" id="hn">Hà
+                                Nội</a></li>
+                            <li class=""><a href="#tab_2-2" data-toggle="tab" aria-expanded="false" id="dn">Đà Nẵng</a>
+                            </li>
+                            <li class=""><a href="#tab_3-2" data-toggle="tab" aria-expanded="false" id="hcm">Hồ Chí
+                                Minh</a></li>
+                            <li class="pull-left header"><i class="fa fa-th"></i> Location</li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="tab_1-1">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6">
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i
+                                                    class="fa fa-thermometer-4"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current temperature</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-temperature-hn">0</span> <sup
+                                                        style="font-size: 20px">&#8451;</sup></h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-temperature-datetime-hn">hh-mm-ss dd-MM-YYYY</b></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current Humidity</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-humidity-hn">0</span>
+                                                    <sup
+                                                            style="font-size: 20px">%</sup>
+                                                </h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-humidity-datetime-hn">hh-mm-ss dd-MM-YYYY</b>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12">
+                                        <div class="box box-solid" style="border: 2px solid gray;">
+                                            <div class="box-body">
+                                                <h4 style="background-color:#f7f7f7; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                                                    Average daily temperature
+                                                </h4>
+                                                <div class="chart-container">
+                                                    <canvas id="average-temperature-bar-chart-hn"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="box-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_2-2">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6">
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i
+                                                    class="fa fa-thermometer-4"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current temperature</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-temperature-dn">0</span> <sup
+                                                        style="font-size: 20px">&#8451;</sup></h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-temperature-datetime-dn">hh-mm-ss dd-MM-YYYY</b></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current Humidity</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-humidity-dn">0</span>
+                                                    <sup
+                                                            style="font-size: 20px">%</sup>
+                                                </h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-humidity-datetime-dn">hh-mm-ss dd-MM-YYYY</b>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12">
+                                        <div class="box box-solid" style="border: 2px solid gray;">
+                                            <div class="box-body">
+                                                <h4 style="background-color:#f7f7f7; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                                                    Average daily temperature
+                                                </h4>
+                                                <div class="chart-container">
+                                                    <canvas id="average-temperature-bar-chart-dn"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="box-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                            <div class="tab-pane" id="tab_3-2">
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-6">
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i
+                                                    class="fa fa-thermometer-4"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current temperature</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-temperature-hcm">0</span> <sup
+                                                        style="font-size: 20px">&#8451;</sup></h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-temperature-datetime-hcm">hh-mm-ss dd-MM-YYYY</b></span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="border: 2px solid gray;" class="info-box">
+                                            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+
+                                            <div class="info-box-content clearfix">
+                                                <span class="info-box-text">Current Humidity</span>
+                                                <h3><span style="font-size: 28px !important;"
+                                                          id="current-humidity-hcm">0</span>
+                                                    <sup
+                                                            style="font-size: 20px">%</sup>
+                                                </h3>
+                                                <p class="pull-right" style="font-size: 12px">Last updated:
+                                                    <span><b
+                                                            id="current-humidity-datetime-hcm">hh-mm-ss dd-MM-YYYY</b>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-sm-12">
+                                        <div class="box box-solid" style="border: 2px solid gray;">
+                                            <div class="box-body">
+                                                <h4 style="background-color:#f7f7f7; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                                                    Average daily temperature
+                                                </h4>
+                                                <div class="chart-container">
+                                                    <canvas id="average-temperature-bar-chart-hcm"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="box-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.tab-pane -->
+                        </div>
+                        <!-- /.tab-content -->
+                    </div>
+                    <!-- nav-tabs-custom -->
+                </div>
+            </div>
+
+            <div class="row bkcloud-dashboard clearfix">
+                <div class="col-sm-12 col-md-9">
+                    <div class="box box-solid">
+                        <div class="box-body">
+                            <h4 style="background-color:#f7f7f7; font-size: 18px; text-align: center; padding: 7px 10px; margin-top: 0;">
+                                Number of devices: <span id="devices-number">0</span>
+                            </h4>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <h4 style="text-align: center;">Device status</h4>
+                                    <hr>
+                                    <div class="device-status-container">
+                                        <canvas id="device-status-pie-chart"></canvas>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <h4 style="text-align: center;">Device types</h4>
+                                    <hr>
+                                    <div class="device-status-container">
+                                        <canvas id="device-types-pie-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="box box-solid">
+                        <div class="box-body">
+                            <div class="small-box bg-aqua small-box-device">
+                                <div class="inner">
+                                    <h3 id="small-box-number-devices">0</h3>
+                                    <p>Devices</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-columns"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+
+                            <div class="small-box bg-orange small-box-sensor">
+                                <div class="inner">
+                                    <h3 id="small-box-number-sensors">0</h3>
+                                    <p>Sensors</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="fa fa-thermometer-empty"></i>
+                                </div>
+                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row bkcloud-datatables-info-container" id="bkcloud-datatables-container">
+                <p id="load-data-for-table" style="display: none;">Loading data ... </p>
+                <table id="bkcloud-datatables-info" class="display" width="100%">
+                </table>
+            </div>
+
+
+            <div class="row" id="sensor-data-chart-container" style="display: none">
+                <p id="load-data-for-chart" style="margin: 30px;">Loading data ... </p>
+                <div class="row" id="combobox-devices" style="display: none">
+                    <div class="col-md-6 col-sm12">
+                        <form class="form-horizontal">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-md-4 col-sm-12 control-label">
+                                        Select device
+                                    </label>
+                                    <div class="col-md-8 col-sm-12">
+                                        <select class="form-control" name="chart-controller-device-input"
+                                                id="chart-controller-device-input">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6 col-sm12">
+                        <form class="form-horizontal">
+                            <div class="box-body">
+                                <div class="form-group">
+                                    <label class="col-md-4 col-sm-12 control-label">
+                                        Select sensor
+                                    </label>
+                                    <div class="col-md-7 col-sm-12">
+                                        <select class="form-control" name="chart-controller-sensor-input"
+                                                id="chart-controller-sensor-input">
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <p id="no-data-realtime" style="margin-left: 100px; display: none">The device have no sensors!</p>
+
+
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <canvas id="realtime-line-chart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 1.1.0
+        </div>
+        <strong>Designed by <a href="#">Ha Manh Dong</a>.</strong>
+    </footer>
+</div>
+
+</body>
+
+<!-- Script Section -->
+
+<script type="text/javascript" src="/dashboard/static/js/plugins/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/select2.min.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/d3.v3.min.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/Chart.min.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/Chart.PieceLabel.min.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/moment.js"></script>
+<!--datatables script -->
+<script type="text/javascript" src="/dashboard/static/js/plugins/datatables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/plugins/datatables/dataTables.bootstrap.js"></script>
+
+<script src="/dashboard/static/bower_components/bootstrap.min.js"></script>
+<script src="/dashboard/static/bower_components/jquery.slimscroll.js"></script>
+<script src="/dashboard/static/bower_components/adminlte.min.js"></script>
+
+<script type="text/javascript" src="/dashboard/static/js/line-chart-lib.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/main.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/dashboard.js"></script>
+<script type="text/javascript" src="/dashboard/static/js/line-chart.js"></script>
+
+<!-- //Script Section -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dashboard').click();
+    });
+</script>
+
+</html>

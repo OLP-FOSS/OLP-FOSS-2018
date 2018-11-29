@@ -16,6 +16,10 @@ Docker: Đóng gói node-red,MQTT broker vào docker-compose.
 
 ![../images/cau2.png](../images/cau2.png)
 
+Mạch esp32:
+
+![cau2_board.jpg](../images/cau2_board.jpg)
+
 ## Cấu trúc node-red
 
 ![../images/cau2_nodered.png](../images/cau2_nodered.png)
@@ -25,3 +29,9 @@ Docker: Đóng gói node-red,MQTT broker vào docker-compose.
 - Node Chart nhận data để vẽ đồ thị
 - Node Time get time
 - Node Template: hiển thị thời gian từ lúc bắt đầu thu thập dữ liệu.
+
+## Hướng dẫn deploy
+
+cd  Cau2/Product
+
+docker-compose up

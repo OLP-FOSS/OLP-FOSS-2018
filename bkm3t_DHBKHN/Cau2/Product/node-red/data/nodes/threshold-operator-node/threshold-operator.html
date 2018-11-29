@@ -1,0 +1,135 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<style>
+    .form-row-threshold-config > label {
+        width: 150px;
+    }
+
+    .form-row-threshold-config > input {
+        width: 60%;
+    }
+
+    .form-row-threshold-config > input:chexbox {
+        width: auto;
+    }
+
+    #input-mqttBroker-form-row>div {
+        width: 60% !important;
+    }
+</style>
+<script type="text/x-red" data-template-name="threshold-operator">
+
+    <div class="form-row form-row-threshold-config">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row form-row-threshold-config">
+        <label for="node-input-temperatureLimit"><i class="fa fa-thermometer-half"></i> Temp threshold</label>
+        <input type="text" id="node-input-temperatureLimit" placeholder="Enter value in range from 1 to 100">
+    </div>
+
+    <div class="form-row form-row-threshold-config">
+        <label for="node-input-humidityLimit"><i class="fa fa-tint"></i> Humidity threshold</label>
+        <input type="text" id="node-input-humidityLimit" placeholder="Enter value in range from 0 to 100">
+    </div>
+    <div class="form-row form-row-threshold-config">
+            <label for="node-input-luxLimit"><i class="fa fa-sun-o"></i> Lux threshold</label>
+            <input type="text" id="node-input-luxLimit" placeholder="Enter value in range from 1 to 65535">
+    </div>
+    <div class="form-row form-row-threshold-config">
+            <label for="node-input-actionTopic"><i class="fa fa-tasks"></i> Action Topic</label>
+            <input type="text" id="node-input-actionTopic" placeholder="Enter Action Topic">
+    </div>
+</script>
+
+
+
+<script type="text/x-red" data-help-name="threshold-operator">
+    <p>A example about node input</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('threshold-operator', {
+        category: 'input',
+        color: '#f79267',
+        defaults: {
+            name: {
+                value: ""
+            },
+
+            temperatureLimit: {
+                value: "",
+                required: true,
+                validate: function (v) {
+                    v = parseInt(v);
+                    var upperTempLimit = 100;
+                    var lowerTempLimit = 0;
+                    if (Number.isInteger(v) && v >= lowerTempLimit && v <= upperTempLimit) {
+                        return true;
+                    };
+                    return false;
+                }
+            },
+            humidityLimit: {
+                value: "",
+                required: true,
+                validate: function (v) {
+                    v = parseInt(v);
+                    var upperHumiLimit = 100;
+                    var lowerHumiLimit = 0;
+                    if (Number.isInteger(v) && v >= lowerHumiLimit && v <= upperHumiLimit) {
+                        return true;
+                    } else {
+                        return false;
+                    };
+                }
+            },
+            luxLimit: {
+                value: "",
+                required: true,
+                validate: function (v) {
+                    v = parseInt(v);
+                    var upperLuxLimit = 65535;
+                    var lowerLuxLimit = 1;
+                    if (Number.isInteger(v) && v >= lowerLuxLimit && v <= upperLuxLimit) {
+                        return true;
+                    } else {
+                        return false;
+                    };
+                }
+            },
+            actionTopic: {
+                value: "",            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "./icons/threshold-operator.png",
+        label: function () {
+            return this.name || "threshold operator";
+
+        },
+        oneditprepare: function () {
+
+        },
+        oneditsave: function () {
+            this.temperatureLimit = parseInt(this.temperatureLimit);
+            this.humidityLimit = parseInt(this.humidityLimit);
+            this.luxLimit = parseInt(this.luxLimit);
+        },
+    });
+</script>

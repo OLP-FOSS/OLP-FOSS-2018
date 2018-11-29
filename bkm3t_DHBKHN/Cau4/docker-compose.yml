@@ -1,0 +1,56 @@
+version: '2'
+services:
+    mqtt:
+        image: eclipse-mosquitto
+        ports:
+          - 1883:1883
+        networks:
+          - bkm3t-net
+    # mysql:
+    #     image: mysql
+    #     restart: always
+    #     environment:
+    #       - MYSQL_ROOT_PASSWORD=thaothao
+    #       - MYSQL_DATABASE=iot
+    #       - MYSQL_USER=thaothao
+    #       - MYSQL_PASSWORD=thaothao
+    #     ports:
+    #       - 3306:3306
+    #     networks:
+    #       - bkm3t-net
+    predict_service:
+        build: ./service_predict
+        # restart: always
+        volumes:
+           - ./service_predict:/service_predict
+        ports:
+           - 5000:5000
+        networks:
+           - bkm3t-net
+        stdin_open: true
+        tty: true
+        # external_links:
+        #    - mqtt:mqtt
+        #    # - mysql:mysql
+        #    - nodered:nodered
+        # command: [bash, -c, "cd /service_predict && pip3 install -r requirements.txt && pip3 install numpy Flask scipy pandas scikit_learn && python3 service.py"]
+
+    nodered:
+        image: nodered/node-red-docker
+        restart: always
+        volumes:
+           - ./node-red/data:/data
+        ports:
+           - 1880:1880
+        networks:
+           - bkm3t-net
+        stdin_open: true
+        tty: true
+        external_links:
+           - mqtt:mqtt
+           # - mysql:mysql
+           # - influxdb:influxdb
+        command: [sh, -c, "cd /data && npm i mysql@2.15.0 influx@5.0.7 express@4.16.0 mustache@2.3.0 moment@2.19.2 node-red-dashboard && cd /usr/src/node-red && npm start -- --userDir /data"]
+
+networks:
+    bkm3t-net:

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../../d3js/.idea/d3js.iml" filepath="$PROJECT_DIR$/../../../d3js/.idea/d3js.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/dashboard.iml" filepath="$PROJECT_DIR$/.idea/dashboard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../../../OlympicTraining/Project-2/cong/nodes/html-chart/.idea/html-chart.iml" filepath="$PROJECT_DIR$/../../../../OlympicTraining/Project-2/cong/nodes/html-chart/.idea/html-chart.iml" />
+    </modules>
+  </component>
+</project>

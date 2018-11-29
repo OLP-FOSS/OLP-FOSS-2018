@@ -1,0 +1,43 @@
+.bkcloud-datatables-info-container {
+    padding: 5px;
+    margin: 5px;
+}
+
+.small-box {
+    /*margin-left: 15px;*/
+}
+
+.small-box .icon {
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.info-box .info-box-icon {
+    height: 117px;
+}
+
+.info-box .info-box-icon i {
+    margin-top: 32px;
+}
+
+.clearfix {
+    overflow: auto;
+}
+
+.current-value-sensors h3 {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.things-state-container .tab-content .tab-pane .box .box-header h3 {
+    width: 100%;
+}
+
+.things-state-container .tab-content .tab-pane .box .box-header h3 .thing-name{
+    margin-left: 15%;
+}
+
+.things-state-container .tab-content .tab-pane .box .box-header h3 b {
+    float: right;
+    margin-right: 15%;
+}

@@ -1,0 +1,565 @@
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+
+
+<script type="text/javascript">
+    RED.nodes.registerType('influxdb-server', {
+        category: 'config',
+        defaults: {
+            host: {
+                value: "127.0.0.1",
+                required: true
+            },
+            port: {
+                value: 8086,
+                required: true,
+                validate: RED.validators.number()
+            },
+            database: {
+                value: "",
+                required: true
+            },
+
+        },
+        label: function () {
+            return this.host + ":" + this.port + " - database:" + this.database;
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="influxdb-server">
+    <div class="form-row">
+        <label for="node-config-input-host"><i class="fa fa-globe"></i> Host</label>
+        <input type="text" id="node-config-input-host">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa fa-location-arrow" aria-hidden="true"></i> Port</label>
+        <input type="text" id="node-config-input-port">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-database"><i class="fa fa-database" aria-hidden="true"></i> Database</label>
+        <input type="text" id="node-config-input-database">
+    </div>
+</script>
+
+<script type="text/x-red" data-template-name="influxdb-out">
+
+    <div class="form-row influxdb-out-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row influxdb-out-row">
+        <label for="node-input-influxdbServer"><i class="fa fa-globe"></i> Server</label>
+        <input type="text" id="node-input-influxdbServer">
+    </div>
+
+    <div class="form-row influxdb-out-row">
+        <label for="node-input-name"><i class="fa fa-table" aria-hidden="true"></i> Measurement</label>
+        <input type="text" id="node-input-measurement" placeholder="Enter measurement here">
+    </div>
+    <div class="form-row influxdb-out-row">
+        <input type="checkbox" id="node-input-enableSchema" style="display: inline-block; width: auto; vertical-align: top; ">
+        <label for="node-input-enableSchema" id="enableSchema-lb">
+            <i class="fa fa-wrench" aria-hidden="true"></i> Schema
+        </label>
+    </div>
+
+    <div class="form-row influxdb-out-row" id="form-schema-row">
+        <div class="form-row influxdb-out-row">
+            <label><i class="fa fa-tags" aria-hidden="true"></i> Tags </label>
+            <ol id="node-input-dbTags-container"></ol>
+        </div>
+        <div class="form-row influxdb-out-row">
+            <label><i class="fa fa-list"></i> Fields</label>
+            <ol id="influxdb-out-node-input-dbFields-container"></ol>
+        </div>
+    </div>
+
+</script>
+
+
+<script type="text/x-red" data-help-name="influxdb-out">
+    <p>An output node use for save data to an influxdb server</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('influxdb-out', {
+        category: 'output',
+        color: '#C0C0C0',
+        defaults: {
+            name: {
+                value: ""
+            },
+            influxdbServer: {
+                value: "",
+                type: "influxdb-server"
+            },
+            measurement: {
+                required: true
+            },
+            enableSchema: {
+                value: false,
+            },
+            dbTags: {
+                value: [],
+                validate: function (tagList) {
+                    if (this.enableSchema == false) {
+                        return true
+                    }
+                    if (tagList.length == 0) {
+                        return false;
+                    }
+                    var isContainEmptyElement = false;
+                    for (var i = 0; i < tagList.length; i++) {
+                        if (tagList[i].length == 0) {
+                            isContainEmptyElement = true;
+                            break;
+                        }
+                    }
+                    if (isContainEmptyElement == true) {
+                        return false;
+                    } else {
+                        return (new Set(tagList)).size == tagList.length;
+                    }
+                }
+            },
+            dbFields: {
+                value: [],
+                validate: function (fieldList) {
+                    if (this.enableSchema == false) {
+                        return true
+                    }
+                    if (fieldList.length == 0) {
+                        return false;
+                    }
+                    var isContainEmptyElement = false;
+                    for (var i = 0; i < fieldList.length; i++) {
+                        if (fieldList[i].length == 0) {
+                            isContainEmptyElement = true;
+                            break;
+                        }
+                    }
+                    if (isContainEmptyElement == true) {
+                        return false;
+                    } else {
+                        return (new Set(fieldList)).size == fieldList.length;
+                    }
+                }
+            },
+        },
+        inputs: 1,
+        outputs: 0,
+        icon: "influxdb-write-data.png",
+        align: "right",
+        label: function () {
+            return this.name || "influxdb out";
+        },
+        oneditprepare: function () {
+            $("#node-input-enableSchema").change(function () {
+                var enableSchema = $("#node-input-enableSchema").is(":checked");
+                if (enableSchema) {
+                    $("#form-schema-row").show();
+                } else {
+                    var tagElement = $("#node-input-dbTags-container");
+                    var fieldElement = $("#influxdb-out-node-input-dbFields-container");
+                    tagElement.editableList('empty');
+                    fieldElement.editableList('empty');
+                    $("#form-schema-row").hide();
+                }
+            });
+
+            function resizeRule(rule) {
+                var newWidth = rule.width();
+                rule.find('.red-ui-typedInput').typedInput("width", (newWidth - 15) / 2);
+
+            }
+
+            var tagList = $("#node-input-dbTags-container")
+                .css('min-height', '180px').editableList({
+                    addItem: function (container, i, tagName) {
+                        var row = $('<div/>').appendTo(container);
+                        var tagNameLabel =
+                            $('<label/>')
+                            .addClass('tag-name-label')
+                            .attr('data-index', i + 1)
+                            .text('Tag ' + (i + 1).toString() + ' Name ')
+                            .appendTo(row);
+                        var tagNameInput = $('<input/>', {
+                                class: "node-input-tag-name",
+                                type: "text"
+                            })
+                            .appendTo(row)
+                        if (tagName.length > 0) {
+                            tagNameInput.val(tagName);
+                        }
+                        resizeRule(container);
+                    },
+                    resizeItem: resizeRule,
+                    removable: true,
+                    addButton: "add new tag"
+                });
+            if (this.dbTags) {
+                for (var i = 0; i < this.dbTags.length; i++) {
+                    tagList.editableList('addItem', this.dbTags[i]);
+                }
+            }
+
+            var fieldList = $("#influxdb-out-node-input-dbFields-container")
+                .css('min-height', '220px')
+                .editableList({
+                    addItem: function (container, i, field) {
+                        var filedIndexLabel =
+                            $('<div class="form-row" style="display: inline-block;"/>')
+                            .appendTo(container);
+                        $('<label style="font-weight: bold;"/>')
+                            .addClass('field-index-label')
+                            .attr('data-index', i + 1)
+                            .text('Field ' + (i + 1).toString())
+                            .appendTo(filedIndexLabel);
+
+                        var fieldNameDiv = $(
+                                '<div class="form-row" style="width:30%;display: inline-block;"/>'
+                            )
+                            .appendTo(container);
+                        $('<label/>')
+                            .addClass('field-name-label')
+                            .text('Name')
+                            .appendTo(fieldNameDiv);
+                        var fieldNameInput = $('<input/>', {
+                                class: "node-input-field-name",
+                                type: "text"
+                            })
+                            .appendTo(fieldNameDiv);
+
+                        var fieldTypeDiv = $(
+                                '<div class="form-row" style="width:20%;display: inline-block;"/>'
+                            )
+                            .appendTo(container);
+                        $('<label/>')
+                            .addClass('field-name-label')
+                            .text('Type ')
+                            .appendTo(fieldTypeDiv);
+                        var fieldTypeSelect =
+                            $('<select/>', {
+                                class: "node-input-field-type",
+                            })
+                            .css('width', '100px')                            
+                            .html(
+                                '<option value="FLOAT">Float</option>' +
+                                '<option value="INTEGER">Integer</option>' +
+                                '<option value="STRING" selected="true">String</option>' +
+                                '<option value="BOOLEAN">Boolean</option>'
+                            )
+                            .appendTo(fieldTypeDiv)
+
+                        if (field.name.length > 0) {
+                            fieldNameInput.val(field.name);
+                        }
+                        fieldTypeSelect.val(field.type);
+                        resizeRule(container);
+                    },
+                    resizeItem: resizeRule,
+                    removable: true,
+                    addButton: "add new field"
+                });
+            if (this.dbFields) {
+                for (var i = 0; i < this.dbFields.length; i++) {
+                    fieldList.editableList('addItem', this.dbFields[i]);
+                }
+            }
+
+        },
+        oneditsave: function () {
+
+            var tags = $("#node-input-dbTags-container").editableList('items');
+            var node = this;
+            node.dbTags = [];
+            for (var i = 0; i < tags.length; i++) {
+                var tagName = $(tags[i]).find("input.node-input-tag-name").val();
+                node.dbTags.push(tagName);
+                if (tagName.length == 0) {
+                    RED.notify("Tags name must not be empty !", "error");
+                }
+            }
+            var fields = $("#influxdb-out-node-input-dbFields-container").editableList('items');
+            var node = this;
+            node.dbFields = [];
+            for (var i = 0; i < fields.length; i++) {
+                var fieldName = $(fields[i]).find("input.node-input-field-name").val();
+                var fieldType = $(fields[i]).find("select.node-input-field-type").val();
+                console.log(fieldType);
+                node.dbFields.push({
+                    'name': fieldName,
+                    'type': fieldType
+                });
+                if (fieldName.length == 0) {
+                    RED.notify("Field name must not be empty !", "error");
+                }
+            }
+
+            if ($("#node-input-enableSchema").is(":checked")) {
+                if (node.dbFields.length == 0 || node.dbTags.length == 0) {
+                    RED.notify("Fields and tags must not be empty!", "error");
+                }
+            }
+            if ((new Set(node.dbTags)).size !== node.dbTags.length) {
+                RED.notify("Entries in tags list must not be duplicated !", "error");
+            };
+
+
+            if ((new Set(node.dbFields)).size !== node.dbFields.length) {
+                RED.notify("Entries in fields list must not be duplicated !", "error");
+            };
+
+        },
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="influxdb-query">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-influxdbServer"><i class="fa fa-globe"></i> Server</label>
+        <input type="text" id="node-input-influxdbServer">
+    </div>
+    <div class="form-row">
+        <div style="display: inline-block;">
+            <label style="vertical-align: middle;
+                            line-height: 20px;padding-top:10px;" for="node-input-outputTo">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> Output To
+            </label>
+        </div>
+        <div style="width:70%;display: inline-block;">
+            <span style="text-align:center;vertical-align: middle;
+                    line-height: 20px;padding-top:10px;"><b>msg.</b></span>
+            <input type="text" style="width:85%; float:right;" id="node-input-outputTo">
+        </div>
+    </div>
+    <div class="form-row" style="margin-bottom: 0px;">
+        <label for="node-input-queryString-editor" style="width: 100% !important;"><i class="fa fa-comments"></i> 
+            Query</span>
+        </label>
+        <input type="hidden" id="node-input-queryString" autofocus="autofocus">
+    </div>
+    <div class="form-row node-text-editor-row">
+        <div style="height: 200; min-height:150px;" class="node-text-editor" id="node-input-queryString-editor"></div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="influxdb-query">
+    <p>An function node use for query data from influxdb</p>
+    <p>To use this node, type query to <b>query field</b>. If this field empty, this node will use field
+        <b>msg.payload.query</b> in input message.
+    </p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('influxdb-query', {
+        category: 'function',
+        color: '#C0C0C0',
+        defaults: {
+            name: {
+                value: ""
+            },
+            influxdbServer: {
+                value: "",
+                type: "influxdb-server"
+            },
+            queryString: {
+                value: "",
+            },
+            outputTo: {
+                value: 'queryResult',
+                required: true
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "influxdb-query.png",
+        label: function () {
+            return this.name || "influxdb query";
+        },
+        oneditprepare: function () {
+            var node = this;
+            this.editor = RED.editor.createEditor({
+                id: 'node-input-queryString-editor',
+                mode: 'ace/mode/sql',
+                value: $("#node-input-queryString").val()
+            });
+            this.editor.focus();
+
+        },
+        oneditsave: function () {
+            $("#node-input-queryString").val(this.editor.getValue());
+            this.editor.destroy();
+            delete this.editor;
+        },
+        oneditcancel: function () {
+            this.editor.destroy();
+            delete this.editor;
+        },
+        oneditresize: function (size) {
+            var rows = $("#dialog-form>div:not(.node-text-editor-row)");
+            var height = $("#dialog-form").height();
+            for (var i = 0; i < rows.size(); i++) {
+                height -= $(rows[i]).outerHeight(true);
+            }
+            var editorRow = $("#dialog-form>div.node-text-editor-row");
+            height -= (parseInt(editorRow.css("marginTop")) + parseInt(editorRow.css("marginBottom")));
+            $(".node-text-editor").css("height", height + "px");
+            this.editor.resize();
+        }
+    });
+</script>
+
+
+<script type="text/x-red" data-template-name="influxdb-write-data">
+
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-influxdbServer"><i class="fa fa-globe"></i> Server</label>
+        <input type="text" id="node-input-influxdbServer">
+    </div>
+    <div class="form-row">
+        <div style="display: inline-block;">
+            <label style="vertical-align: middle;
+                                line-height: 20px;padding-top:10px;" for="node-input-dataInput">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i> Input
+                </label>
+        </div>
+        <div style="width:70%;display: inline-block;">
+            <span style="text-align:center;vertical-align: middle;
+                        line-height: 20px;padding-top:10px;"><b>msg.</b></span>
+            <input type="text" style="width:85%; float:right;" id="node-input-dataInput">
+        </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-table" aria-hidden="true"></i> Measure</label>
+        <input type="text" id="node-input-measurement" placeholder="Enter measurement here">
+    </div>
+    <div class="form-row">
+        <div style="display: inline-block;">
+            <label style="vertical-align: middle;
+                                line-height: 20px;padding-top:10px;" for="node-input-outputTo">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>Output
+                </label>
+        </div>
+        <div style="width:70%;display: inline-block;">
+            <span style="text-align:center;vertical-align: middle;
+                        line-height: 20px;padding-top:10px;"><b>msg.</b></span>
+            <input type="text" style="width:85%; float:right;" id="node-input-outputTo">
+        </div>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="influxdb-write-data">
+    <p>Connect to influxdb server and write a data point, then return result</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+        <dt>Server <span class="property-type">config node</span></dt>
+        <dd>The server which this node is connecting to</dd>
+
+        <dt>Input <span class="property-type">string</span></dt>
+        <dd>The payload in input message will contain data point: msg.[Input]</dd>
+
+        <dt>Output <span class="property-type">string</span></dt>
+        <dd>The payload in out message will contain write result: msg.[Output]</dd>
+
+        <dt>Measurement <span class="property-type">string</span></dt>
+        <dd>The measurement in influxdb server which will be writed input data point to. If this is empty, this value will in
+            msg.influx_measurement
+        </dd>
+    </dl>
+    <h3>Details</h3>
+    <code>msg.[Input]</code> is used as the payload of the new data which we want write to influxdb server. The content of
+    this must conform with the following format:
+    <div>
+        <code>
+            msg.[Input] = {<br>
+                tags:{'key1':value1, 'key2':value2, ..., 'keyk':valuek,}, // optional<br>
+                fields:{'key1':value1, 'key2':value2, ..., 'keyn':valuen,}, // must not empty<br> 
+                time_stamp: unix timestamp integer number in nanosecond<br>
+            }<br>
+        </code>
+    </div>
+    <p>Or <code>msg.[Input]</code> is array has following format:</p>
+    <div>
+        <code>
+            msg.[Input] = 
+            [<br>
+            {<br>
+                tags:{'key1':value11, 'key2':value12, ..., 'keyk':value1k,}, // optional<br>
+                fields:{'key1':value11, 'key2':value12, ..., 'keyn':value1n,}, // must not empty<br> 
+                time_stamp: unix timestamp integer number in nanosecond<br>
+            },<br>
+            {<br>
+                tags:{'key1':value21, 'key2':value22, ..., 'keyk':value2k,}, // optional<br>
+                fields:{'key1':value21, 'key2':value22, ..., 'keyn':value2n,}, // must not empty<br> 
+                time_stamp: unix timestamp integer number in nanosecond<br>
+            }<br>
+            ...
+            ]
+        </code>
+    </div>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('influxdb-write-data', {
+        category: 'function',
+        color: '#C0C0C0',
+        defaults: {
+            name: {
+                value: ""
+            },
+            influxdbServer: {
+                value: "",
+                type: "influxdb-server"
+            },
+            dataInput: {
+                value: 'writeDataInput',
+                required: true,
+            },
+            measurement: {
+                value: '',
+            },
+            outputTo: {
+                value: 'writeDataResult',
+                required: true
+            },
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "influxdb-write-data.png",
+        label: function () {
+            return this.name || "influxdb write data";
+        },
+        oneditprepare: function () {
+            var node = this;
+
+        },
+        oneditsave: function () {},
+        oneditcancel: function () {},
+        oneditresize: function (size) {}
+    });
+</script>

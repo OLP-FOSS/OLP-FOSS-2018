@@ -35,3 +35,6 @@
     - 10: 'LIE_TO_SIT',
     - 11: 'STAND_TO_LIE',
     - 12: 'LIE_TO_STAND'
+##License:
+ - FastDTW (MIT License)
+ - BSD licenses

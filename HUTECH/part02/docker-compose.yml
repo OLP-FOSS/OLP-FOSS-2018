@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  mqtt:
+    image: eclipse-mosquitto:1.4.10
+    restart: always
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+      - ./mosquitto/config/:/mosquitto/config
+
+  node-red:
+    image: machinedata/node-red
+    volumes:
+    restart: always
+    volumes:
+      - ./node-red/data:/data
+    ports:
+      - 1880:1880
+    external_links:
+      - mqtt:mqtt
+    command: [sh, -c, "cd /data && npm i node-red-contrib-meo-esp node-red-dashboard && node-red --settings /data/settings.js"]

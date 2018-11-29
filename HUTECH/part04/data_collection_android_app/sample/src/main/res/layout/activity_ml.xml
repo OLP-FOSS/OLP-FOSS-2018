@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.directions.sample.MLActivity">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:id="@+id/ln_abc"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="X: 1202.21"
+            android:id="@+id/tv_x"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Y: 1202.21"
+            android:id="@+id/tv_y"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Z: 1202.21"
+            android:id="@+id/tv_z"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:id="@+id/ln_result"
+        android:layout_below="@+id/ln_abc"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="Correct"
+            android:id="@+id/btn_correct"
+            android:enabled="false"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:text="Not"
+            android:enabled="false"
+            android:id="@+id/btn_not_correct"
+            android:layout_marginLeft="40dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:text="View database"
+        android:layout_marginEnd="5dp"
+        android:id="@+id/btn_view_database"
+        android:layout_alignParentEnd="true"
+        android:layout_height="wrap_content" />
+    <Button
+        android:layout_width="wrap_content"
+        android:text="Upload training data"
+        android:layout_marginStart="5dp"
+        android:id="@+id/btn_upload_database"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

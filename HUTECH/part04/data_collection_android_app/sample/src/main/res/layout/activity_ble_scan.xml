@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@drawable/background"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:layout_centerHorizontal="true"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/icon_test"
+        android:id="@+id/btn_test_drop"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:text="Write characteristic"
+        android:id="@+id/writeTest"/>
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/ic_search"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/StartScanButton"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/ic_stop_search"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/StopScanButton"
+        android:layout_marginTop="5dp"/>
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="60dp"
+        android:background="#44000000"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/listview"
+        android:scrollbars="vertical"
+        android:maxLines="30" />
+
+    <Button
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Disconnect from device"
+        android:layout_marginBottom="5dp"
+        android:background="#ffffff"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:id="@+id/DisconnectButton"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

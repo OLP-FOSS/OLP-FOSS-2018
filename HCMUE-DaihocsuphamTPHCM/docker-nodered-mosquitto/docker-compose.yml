@@ -1,0 +1,45 @@
+version: '2'
+services:
+
+  consul:
+    image:  gliderlabs/consul-server:latest
+    command: "-bootstrap -client 0.0.0.0"
+    container_name: consul
+    hostname: consul
+    ports:
+    - 8500:8500
+
+  registrator:
+    image: gliderlabs/registrator:latest
+    command: "-internal consul://consul:8500"
+    container_name: registrator
+    hostname: registrator
+    depends_on:
+    - consul
+    volumes:
+    - /var/run/docker.sock:/tmp/docker.sock
+
+  nodered:
+    image: ${USER}/node-red
+    build: 
+      context: ./nodered
+    environment:
+    - SERVICE_NAME=node-red
+    ports:
+    - "1880:1880"
+    links:
+    - mosquitto
+    command: /usr/local/bin/node-red -v flows.json
+
+  mosquitto:
+    image: ${USER}/mosquitto
+    build: 
+      context: ./mosquitto
+      args:
+        VERSION: 1.5.1
+    environment:
+    - SERVICE_NAME=mosquitto
+    ports:
+    - "1883:1883"
+    - "9883:9883"
+

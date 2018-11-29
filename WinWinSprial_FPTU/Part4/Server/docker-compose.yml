@@ -1,0 +1,46 @@
+version: "3"
+services:
+  mqtt:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    restart: always
+
+  influxdb:
+    image: influxdb
+    environment: 
+      - INFLUXDB_DB=iot
+      - INFLUXDB_USER=admin
+      - INFLUXDB_USER_PASSWORD=admin
+    restart: always
+    ports: 
+      - 8086:8086
+
+  mysql:
+    build: ./mysql
+    restart: always
+
+  adminer:
+    image: adminer
+    restart: always
+    ports: 
+      - 8080:8080
+
+  nodered:
+    image: nodered/node-red-docker
+    restart: always
+    volumes:
+      - ./node-red/data:/data
+    ports:
+      - 1880:1880
+    command: [sh, -c, "cd /data && npm i node-red-node-mysql node-red-contrib-influxdb node-red-dashboard && cd /usr/src/node-red && npm start -- --userDir /data"]
+
+  detector:
+    build: ./detector
+    volumes:
+    - ./detector:/usr/src/app
+    depends_on: 
+      - influxdb
+      - mysql
+    tty: true

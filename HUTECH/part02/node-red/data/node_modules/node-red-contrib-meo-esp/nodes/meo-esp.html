@@ -1,0 +1,141 @@
+<script type="text/javascript">
+  RED.nodes.registerType('meo-esp-in', {
+    category: 'input',
+    color: '#a6bbcf',
+    defaults: {
+      name: {value: ""},
+      deviceId: {require: true},
+      broker: {type: "mqtt-broker", require: true}
+    },
+    inputs: 0,
+    outputs: 1,
+    icon: "esp.png",
+    label: function() {
+      return this.name || this.deviceId || "meo esp in";
+    },
+    labelStyle: function() {
+      return this.name?  "node_label_italic":"";
+    }
+  })
+</script>
+
+<script type="text/x-red" data-template-name="meo-esp-in">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-deviceId"><i class="fa fa-tasks"></i> Device ID</label>
+        <input type="text" id="node-input-deviceId" placeholder="Device ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="mqtt.label.broker"></span></label>
+        <input type="text" id="node-input-broker">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="meo-esp-in">
+    <p>A Node that represents an ESP Board with MEO ESP firmware flashed on. This node's output is data of all pins read from MEO ESP including: D5 -> D8, A0, V1 -> V5</p>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('meo-esp-out', {
+    category: 'output',
+    color: '#a6bbcf',
+    defaults: {
+      name: {value: ""},
+      deviceId: {require: true},
+      broker: {type: "mqtt-broker", require: true},
+      D0: {value: ""}, D0pwm: {value: false},
+      D1: {value: ""}, D1pwm: {value: false},
+      D2: {value: ""}, D2pwm: {value: false},
+      D3: {value: ""}, D3pwm: {value: false},
+      D4: {value: ""}, D4pwm: {value: false},
+      F1: {value: false},
+      F2: {value: false},
+      F3: {value: false},
+      F4: {value: false},
+      F5: {value: false},
+    },
+    inputs: 1,
+    outputs: 0,
+    icon: "esp.png",
+    align: "right",
+    label: function() {
+      return this.name || this.deviceId || "meo esp out";
+    },
+    labelStyle: function() {
+      return this.name?  "node_label_italic":"";
+    }
+  })
+</script>
+
+<script type="text/x-red" data-template-name="meo-esp-out">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-deviceId"><i class="fa fa-tasks"></i> Device ID</label>
+        <input type="text" id="node-input-deviceId" placeholder="Device ID">
+    </div>
+    <div class="form-row">
+        <label for="node-input-broker"><i class="fa fa-globe"></i> <span data-i18n="mqtt.label.broker"></span></label>
+        <input type="text" id="node-input-broker">
+    </div>
+    <hr/>
+    <div><strong>Data to send to ESP Board (tick the check box for PWM output)</strong></div>
+    <br/>
+    <div class="form-row">
+        <label for="node-input-D0"></i>Pin D0</label>
+        <input type="text" id="node-input-D0" placeholder="A number or leave blank">
+        <input type="checkbox" id="node-input-D0pwm" style="width: 5%;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-D1"></i>Pin D1</label>
+        <input type="text" id="node-input-D1" placeholder="A number or leave blank">
+        <input type="checkbox" id="node-input-D1pwm" style="width: 5%;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-D2"></i>Pin D2</label>
+        <input type="text" id="node-input-D2" placeholder="A number or leave blank">
+        <input type="checkbox" id="node-input-D2pwm" style="width: 5%;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-D3"></i>Pin D3</label>
+        <input type="text" id="node-input-D3" placeholder="A number or leave blank">
+        <input type="checkbox" id="node-input-D3pwm" style="width: 5%;">
+    </div>
+    <div class="form-row">
+        <label for="node-input-D4"></i>Pin D4</label>
+        <input type="text" id="node-input-D4" placeholder="A number or leave blank">
+        <input type="checkbox" id="node-input-D4pwm" style="width: 5%;">
+    </div>
+    <hr/>
+    <div><strong>Trigger functions on ESP Board (check the functions you want to trigger on ESP Board)</strong></div>
+    <br/>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-F1" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-F1" style="width: auto">Trigger function F1</label>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-F2" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-F2" style="width: auto">Trigger function F2</label>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-F3" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-F3" style="width: auto">Trigger function F3</label>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-F4" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-F4" style="width: auto">Trigger function F4</label>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-F5" style="display: inline-block; width: auto; vertical-align: top;">
+        <label for="node-input-F5" style="width: auto">Trigger function F5</label>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="meo-esp-out">
+    <p>A Node that represents an ESP Board with MEO ESP firmware flashed on. This node will send data configurated to MEO ESP Board</p>
+</script>

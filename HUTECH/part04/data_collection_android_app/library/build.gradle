@@ -1,0 +1,107 @@
+apply plugin: 'com.android.library'
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.google.android.gms:play-services-maps:8.4.0'
+}
+// This is the library version used when deploying the artifact
+version = "1.0.9"
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 10
+        targetSdkVersion 22
+    }
+}
+
+
+
+def siteUrl = 'https://github.com/jd-alexander/Google-Directions-Android'      // Homepage URL of the library
+def gitUrl = 'https://github.com/jd-alexander/Google-Directions-Android.git'   // Git repository URL
+group = "com.github.jd-alexander"                      // Maven Group ID for the artifact
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'aar'
+
+                // Add your description here
+                name 'Google Directions Android'
+                description = 'This project allows you to calculate the route between two locations and displays it on a map.'
+
+                url siteUrl
+
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'com.github.jd-alexander '
+                        name 'Joel Dean'
+                        email 'jdeanjj1000@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+
+                }
+            }
+        }
+    }
+}
+
+
+
+//Only necessary to push to bintray. Causes Travis CI builds to fail.
+/*
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        // it is the name that appears in bintray when logged
+        name = "Google-Directions-Android"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+        version {
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+                //Optional. The passphrase for GPG signing'
+            }
+            mavenCentralSync {
+                sync = true
+                //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = properties.getProperty("bintray.oss.user") //OSS user token
+                password = properties.getProperty("bintray.oss.password") //OSS user password
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
+        }
+    }
+
+
+}
+*/

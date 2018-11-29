@@ -672,10 +672,11 @@ void loop() {
 
   display.print("Ax: ");
   display.print(aaWorld.x);
-  display.print("/");
+  display.print(" / ");
   display.print("Ay: ");
   display.print(aaWorld.y);
-  display.print("/");
+//  display.print("/");
+  display.setCursor(10,20);
   display.print("Az: ");
   display.print(aaWorld.z);
   

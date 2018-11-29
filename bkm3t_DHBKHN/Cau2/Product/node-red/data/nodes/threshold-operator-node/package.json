@@ -1,0 +1,18 @@
+{
+  "name": "threshold_operator",
+  "version": "1.0.0",
+  "description": "Threshold Operator Node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },  
+  "dependencies": {
+  },
+  "author": "Ha Minh Cong",
+  "license": "ISC",
+  "main": "none",
+  "node-red": {
+      "nodes": {
+          "threshold-config": "threshold-operator.js"
+      }
+  }
+}

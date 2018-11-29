@@ -14,14 +14,13 @@
 ## gesture
 - link: localhost:5000/predict_gesture
 - method: post
-- data: list points of data, each point has yaw, pitch, roll, ax, ay, ax, timestamp
+- data: list points of data, each point has yaw, pitch, roll, ax, ay, ax, timestamp with format json
 - number of data: about 30 point
 - return: ['up', 'down', 'right', 'left', 'in', 'out', 'fixedly', 'unknown']
-- [example gestures]()
 ## activity
 - link: localhost:5000/predict_activity
 - method: post
-- data: list points of data, each point has yaw, pitch, roll, ax, ay, ax, timestamp
+- data: list points of data, each point has yaw, pitch, roll, ax, ay, ax, timestamp with format json
 - number of data: sent in stream
 - return: 
     - 1: 'WALKING',
@@ -36,4 +35,3 @@
     - 10: 'LIE_TO_SIT',
     - 11: 'STAND_TO_LIE',
     - 12: 'LIE_TO_STAND'
-- [example activity]()

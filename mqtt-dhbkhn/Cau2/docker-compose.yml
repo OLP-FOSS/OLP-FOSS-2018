@@ -1,0 +1,17 @@
+version: '2'
+services:
+    mqtt:
+        image: haiquan5396/mqtt
+        ports:
+          - 1883:1883
+    nodered:
+        image: nodered/node-red-docker
+        restart: always
+        volumes:
+           - ./node-red:/data
+        ports:
+           - 1880:1880
+        stdin_open: true
+        tty: true
+        external_links:
+           - mqtt:mqtt

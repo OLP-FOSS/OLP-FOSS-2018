@@ -1,0 +1,37 @@
+version: '2'
+services:
+    mqtt:
+        image: eclipse-mosquitto
+        ports:
+          - 1883:1883
+        networks:
+          - hou-net
+    
+    influxdb:
+        image: influxdb
+        environment:
+          - INFLUXDB_DB=test
+        ports:
+          - 8086:8086
+        networks:
+          - hou-net
+
+    nodered:
+        image: nodered/node-red-docker
+        restart: always
+        volumes:
+           - ./node-red:/node-red
+        ports:
+           - 1880:1880
+        networks:
+           - hou-net
+        stdin_open: true
+        tty: true
+        external_links:
+           - mqtt:mqtt
+           - influxdb:influxdb
+        command: [sh, -c, "cd /node-red && node-red -v -u /node-red"]
+
+networks:
+    hou-net:
+

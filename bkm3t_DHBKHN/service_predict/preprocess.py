@@ -56,6 +56,7 @@ def parse_data(raw_data):
 def segment_data_with_timestamp(data, time_split):
     results = list()
     timestamps = data[['timestamps']].values
+    # print(timestamps)
     start_time = timestamps[0]
     # if timestamps[-1] - start_time < time_split:
     #     buffer = data

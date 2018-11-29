@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 import json
 from preprocess import segment_data, get_features, parse_data, segment_data_with_timestamp
-# from gesture import get_gestures
+from gesture import get_gestures
 from dtwknn import DtwKnn
 
 mapping_activities = {
@@ -35,22 +35,22 @@ def predict_gesture():
         data = request.data.decode('utf8')
         # print(data)
         data = parse_data(data)
-        # a = data[['ax', 'ay', 'az']]
-        # a.to_csv('data/templace.csv', index=False, mode='a', header=False)
-        # label = 'left'
-        # print(data)
-        # print("dtw:", model_gesture.predict(data[['ax', 'ay', 'az']].values))
-        #
-        # result = get_gestures(data)
-        # print("threshold:", result)
-        # if result is not None:
-        #     return result
-        # else:
-        #     return 'unknown'
+        a = data[['ax', 'ay', 'az']]
+        a.to_csv('data/templace.csv', index=False, mode='a', header=False)
+        label = 'left'
+        print(data)
+        print("dtw:", dtwknn.predict(data[['ax', 'ay', 'az']].values))
+
+        result = get_gestures(data)
+        print("threshold:", result)
+        if result is not None:
+            return result
+        else:
+            return 'unknown'
         pass
 
 
-@app.route('add_sample_dtw', methods=['GET', 'POST'])
+@app.route('/add_sample_dtw', methods=['GET', 'POST'])
 def add_sample_dtw():
     if request.method == 'POST':
         data = request.data.decode('utf8')

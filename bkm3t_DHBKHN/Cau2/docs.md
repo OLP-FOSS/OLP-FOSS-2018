@@ -35,3 +35,15 @@ Mạch esp32:
 cd  Cau2/Product
 
 docker-compose up
+
+## Đề xuất cải thiện thiết kế của M.E.O 2.0
+
+### Cải thiện giao diện
+
+Thiết kế giao diện như hình để giao diện trở nên thân thiện hơn
+
+![cau2_board.jpg](../images/screen.png)
+
+### Thiết kế sơ đồ mạch
+
+Lắp thêm cảm biến nhịp tim để phục vụ cho bài toán học máy đưa ra cảnh báo cho người dùng.

@@ -1,0 +1,12 @@
+{
+    "name": "node-red-project",
+    "description": "A Node-RED Project",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "lodash": "^4.16.6",
+        "mysql": "^2.14.1",
+        "node-red-contrib-influxdb": "^0.2.1",
+        "node-red-node-mysql": "0.0.16"
+    }
+}

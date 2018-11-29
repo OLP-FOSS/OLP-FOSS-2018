@@ -1,6 +1,4 @@
 
-
-
 Phần mềm yêu cầu:
 	- Node-RED
 	- InfluxDB

@@ -1,0 +1,26 @@
+<script type="text/x-red" data-template-name="dashboard">
+    <div class="form-row form-row-dashboard">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+<script type="text/x-red" data-help-name="dashboard">
+    <p>Custom static (html, js, css) dashboard</p>
+</script>
+<script type="text/javascript">
+    RED.nodes.registerType('dashboard', {
+        category: 'espx',
+        color: '#f79267',
+        defaults: {
+            name: {
+                value: ""
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "dashboard.png",
+        label: function () {
+            return this.name;
+        }
+    });
+</script>

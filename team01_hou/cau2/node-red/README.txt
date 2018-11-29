@@ -1,0 +1,3 @@
+eclipse-mosquitto
+mysql
+influxdb
